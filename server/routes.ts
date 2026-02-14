@@ -92,10 +92,14 @@ export async function registerRoutes(httpServer: Server, app: Express): Promise<
   app.post(api.series.create.path, async (req, res) => {
     if (!req.isAuthenticated()) return res.status(401).json({ message: "Unauthorized" });
 
+    const userId = (req.user as any).claims.sub;
+    const user = await authStorage.getUser(userId);
+    if (!user?.isAdmin) return res.status(403).json({ message: "Forbidden: Admin only" });
+
     try {
       const input = api.series.create.input.parse(req.body);
       // Associate with current user
-      const series = await storage.createSeries({ ...input, userId: (req.user as any).claims.sub });
+      const series = await storage.createSeries({ ...input, userId: userId });
       res.status(201).json(series);
     } catch (err) {
       if (err instanceof z.ZodError) {
@@ -126,6 +130,10 @@ export async function registerRoutes(httpServer: Server, app: Express): Promise<
   app.post(api.chapters.create.path, async (req, res) => {
     if (!req.isAuthenticated()) return res.status(401).json({ message: "Unauthorized" });
 
+    const userId = (req.user as any).claims.sub;
+    const user = await authStorage.getUser(userId);
+    if (!user?.isAdmin) return res.status(403).json({ message: "Forbidden: Admin only" });
+
     try {
       const seriesId = parseInt(req.params.seriesId);
       if (isNaN(seriesId)) return res.status(400).json({ message: "Invalid Series ID" });
@@ -134,7 +142,10 @@ export async function registerRoutes(httpServer: Server, app: Express): Promise<
       // Verify user owns series
       const series = await storage.getSeries(seriesId);
       if (!series) return res.status(404).json({ message: "Series not found" });
-      if (series.userId !== (req.user as any).claims.sub) return res.status(403).json({ message: "Forbidden" });
+      
+      // In this app, only admins upload, so we don't strictly need to check ownership if they are admin, 
+      // but it's good practice. For now, just allow if admin.
+      // if (series.userId !== userId) return res.status(403).json({ message: "Forbidden" });
 
       // Create chapter
       const chapter = await storage.createChapter({
