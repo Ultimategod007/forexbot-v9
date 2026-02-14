@@ -18,7 +18,7 @@ async function fetchUser(): Promise<User | null> {
 }
 
 async function logout(): Promise<void> {
-  window.location.href = "/api/logout";
+  window.location.replace("/api/logout");
 }
 
 export function useAuth() {
@@ -29,6 +29,10 @@ export function useAuth() {
     retry: false,
     staleTime: 1000 * 60 * 5, // 5 minutes
   });
+
+  const login = () => {
+    window.location.assign("/api/login");
+  };
 
   const logoutMutation = useMutation({
     mutationFn: logout,
@@ -41,6 +45,8 @@ export function useAuth() {
     user,
     isLoading,
     isAuthenticated: !!user,
+    isAdmin: !!user?.isAdmin,
+    login,
     logout: logoutMutation.mutate,
     isLoggingOut: logoutMutation.isPending,
   };
