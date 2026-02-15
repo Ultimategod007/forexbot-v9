@@ -33,7 +33,7 @@ const createChapterFormSchema = insertChapterSchema.omit({ seriesId: true }).ext
 type CreateChapterFormValues = z.infer<typeof createChapterFormSchema>;
 
 export default function Upload() {
-  const { user, isLoading: isAuthLoading } = useAuth();
+  const { user, isLoading: isAuthLoading, isAdmin } = useAuth();
   const [, setLocation] = useLocation();
   const { mutate: createSeries, isPending: isCreatingSeries } = useCreateSeries();
   const { mutate: createChapter, isPending: isCreatingChapter } = useCreateChapter();
@@ -64,16 +64,27 @@ export default function Upload() {
 
   if (isAuthLoading) return null;
   
-  if (!user) {
+  if (!user || !isAdmin) {
     return (
       <Layout>
         <div className="container max-w-md mx-auto py-20 px-4 text-center">
           <UploadCloud className="w-16 h-16 text-muted-foreground mx-auto mb-6" />
           <h1 className="text-2xl font-bold mb-2">Creator Studio</h1>
-          <p className="text-muted-foreground mb-8">Sign in to start publishing your own series and chapters.</p>
-          <Button asChild className="w-full">
-            <a href="/api/login">Login with Replit</a>
-          </Button>
+          <p className="text-muted-foreground mb-8">
+            {!user 
+              ? "Sign in to start publishing your own series and chapters." 
+              : "Only authorized creators can upload content. Contact the administrator for access."}
+          </p>
+          {!user && (
+            <Button asChild className="w-full">
+              <a href="/api/login">Login with Replit</a>
+            </Button>
+          )}
+          {user && !isAdmin && (
+            <Button asChild variant="outline" className="w-full">
+              <a href="/">Back to Home</a>
+            </Button>
+          )}
         </div>
       </Layout>
     );
