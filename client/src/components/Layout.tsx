@@ -79,7 +79,14 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 </AvatarFallback>
               </Avatar>
               <div className="flex flex-col min-w-0">
-                <span className="text-sm font-medium truncate">{user.firstName || "User"}</span>
+                <div className="flex items-center gap-1.5">
+                  <span className="text-sm font-medium truncate">{user.firstName || "User"}</span>
+                  {user.isAdmin && (
+                    <span className="text-[10px] bg-primary/20 text-primary px-1 py-0 rounded uppercase font-bold leading-none">
+                      Admin
+                    </span>
+                  )}
+                </div>
                 <span className="text-xs text-muted-foreground truncate">{user.email}</span>
               </div>
             </div>
@@ -95,9 +102,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
         ) : (
           <Button 
             className="w-full bg-gradient-to-r from-primary to-purple-600 hover:shadow-lg hover:shadow-primary/25 transition-all" 
-            asChild
+            onClick={() => window.location.assign("/api/login")}
           >
-            <a href="/api/login">Login / Register</a>
+            Login / Register
           </Button>
         )}
       </div>

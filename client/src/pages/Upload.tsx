@@ -33,11 +33,11 @@ const createChapterFormSchema = insertChapterSchema.omit({ seriesId: true }).ext
 type CreateChapterFormValues = z.infer<typeof createChapterFormSchema>;
 
 export default function Upload() {
-  const { user, isLoading: isAuthLoading, isAdmin } = useAuth();
+  const { user, isLoading: isAuthLoading, isAdmin, login } = useAuth();
   const [, setLocation] = useLocation();
   const { mutate: createSeries, isPending: isCreatingSeries } = useCreateSeries();
   const { mutate: createChapter, isPending: isCreatingChapter } = useCreateChapter();
-  const { data: mySeries } = useSeries(); // In real app, filter by userId or use useMySeries
+  const { data: mySeries } = useSeries(); 
   
   const [selectedSeriesId, setSelectedSeriesId] = useState<string>("");
 
@@ -48,7 +48,7 @@ export default function Upload() {
       description: "",
       author: "",
       coverImage: "",
-      genres: "Action, Fantasy" as any, // Cast for default value rendering
+      genres: "Action, Fantasy" as any, 
       status: "ongoing",
     },
   });
@@ -62,7 +62,18 @@ export default function Upload() {
     },
   });
 
-  if (isAuthLoading) return null;
+  if (isAuthLoading) {
+    return (
+      <Layout>
+        <div className="flex items-center justify-center min-h-[60vh]">
+          <div className="animate-pulse flex flex-col items-center">
+            <div className="w-12 h-12 bg-primary/20 rounded-full mb-4" />
+            <div className="h-4 w-32 bg-secondary rounded" />
+          </div>
+        </div>
+      </Layout>
+    );
+  }
   
   if (!user || !isAdmin) {
     return (
@@ -73,16 +84,16 @@ export default function Upload() {
           <p className="text-muted-foreground mb-8">
             {!user 
               ? "Sign in to start publishing your own series and chapters." 
-              : "Only authorized creators can upload content. Contact the administrator for access."}
+              : "Only authorized creators can upload content. Your account does not have admin privileges."}
           </p>
           {!user && (
-            <Button asChild className="w-full">
-              <a href="/api/login">Login with Replit</a>
+            <Button onClick={login} className="w-full">
+              Login with Replit
             </Button>
           )}
           {user && !isAdmin && (
             <Button asChild variant="outline" className="w-full">
-              <a href="/">Back to Home</a>
+              <Link href="/">Back to Home</Link>
             </Button>
           )}
         </div>
