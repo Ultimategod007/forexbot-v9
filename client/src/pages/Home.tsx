@@ -142,12 +142,10 @@ export default function Home() {
 
   if (isLoading) {
     return (
-      <Layout>
-        <div className="p-6 space-y-8">
-          <div className="h-[400px] w-full bg-muted animate-pulse rounded-2xl" />
-          <SeriesGridSkeleton />
-        </div>
-      </Layout>
+      <div className="p-6 space-y-8">
+        <div className="h-[400px] w-full bg-muted animate-pulse rounded-2xl" />
+        <SeriesGridSkeleton />
+      </div>
     );
   }
 
@@ -155,37 +153,35 @@ export default function Home() {
   const latest = series || [];
 
   return (
-    <Layout>
-      <div className="pb-20">
-        <HeroCarousel series={featured} />
-        
-        <div className="container mx-auto max-w-7xl">
-          <Section title="Trending Now" icon={Flame} link="/browse?sort=trending">
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6">
-              {trending?.map((s) => (
-                <SeriesCard key={s.id} series={s} />
-              ))}
-            </div>
-          </Section>
+    <div className="pb-20">
+      <HeroCarousel series={featured} />
+      
+      <div className="container mx-auto max-w-7xl">
+        <Section title="Trending Now" icon={Flame} link="/browse?sort=trending">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6">
+            {trending?.map((s) => (
+              <SeriesCard key={s.id} series={s} />
+            ))}
+          </div>
+        </Section>
 
-          <Section title="New Releases" icon={Sparkles} link="/browse?sort=new">
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6">
-              {latest.map((s) => (
-                <SeriesCard key={s.id} series={s} />
-              ))}
-            </div>
-          </Section>
+        <Section title="New Releases" icon={Sparkles} link="/browse?sort=new">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6">
+            {latest.map((s) => (
+              <SeriesCard key={s.id} series={s} />
+            ))}
+          </div>
+        </Section>
 
-          <Section title="Continue Reading" icon={Clock}>
-            <div className="bg-secondary/30 border border-dashed border-border rounded-xl p-8 text-center">
-              <p className="text-muted-foreground">Sign in to track your reading progress</p>
-              <Link href="/api/login">
-                 <Button variant="link" className="text-primary mt-2">Login now</Button>
-              </Link>
-            </div>
-          </Section>
-        </div>
+        <Section title="Continue Reading" icon={Clock}>
+          <div className="bg-secondary/30 border border-dashed border-border rounded-xl p-8 text-center">
+            <p className="text-muted-foreground">Sign in to track your reading progress</p>
+            <Link href="/api/login">
+               <Button variant="link" className="text-primary mt-2">Login now</Button>
+            </Link>
+          </div>
+        </Section>
       </div>
-    </Layout>
+    </div>
   );
 }
