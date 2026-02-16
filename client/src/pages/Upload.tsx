@@ -66,10 +66,7 @@ export default function Upload() {
     return (
       <Layout>
         <div className="flex items-center justify-center min-h-[60vh]">
-          <div className="animate-pulse flex flex-col items-center">
-            <div className="w-12 h-12 bg-primary/20 rounded-full mb-4" />
-            <div className="h-4 w-32 bg-secondary rounded" />
-          </div>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
         </div>
       </Layout>
     );

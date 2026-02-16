@@ -26,8 +26,12 @@ export function useAuth() {
   const { data: user, isLoading, refetch } = useQuery<User | null>({
     queryKey: ["/api/auth/user"],
     queryFn: fetchUser,
-    retry: false,
-    staleTime: 1000 * 60, // 1 minute
+    retry: (failureCount, error: any) => {
+      if (error?.message?.includes("401")) return false;
+      return failureCount < 2;
+    },
+    staleTime: 0, // Always check on mount/focus for auth
+    refetchOnWindowFocus: true,
   });
 
   const login = () => {

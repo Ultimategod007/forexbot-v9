@@ -40,7 +40,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
     { href: "/", icon: Home, label: "Home" },
     { href: "/browse", icon: Compass, label: "Browse" },
     { href: "/library", icon: Library, label: "Library" },
-    { href: "/upload", icon: UploadCloud, label: "Creator Studio" },
+    ...(user?.isAdmin ? [{ href: "/upload", icon: UploadCloud, label: "Creator Studio" }] : []),
   ];
 
   const SidebarContent = () => (
