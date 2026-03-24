@@ -1,5 +1,4 @@
 import { useSeries } from "@/hooks/use-series";
-import { Layout } from "@/components/Layout";
 import { SeriesCard } from "@/components/SeriesCard";
 import { Button } from "@/components/ui/button";
 import { ChevronRight, Flame, Sparkles, Clock } from "lucide-react";

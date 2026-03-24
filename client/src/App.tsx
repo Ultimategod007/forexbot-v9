@@ -13,19 +13,21 @@ import { Layout } from "@/components/Layout";
 
 function Router() {
   return (
-    <Layout>
-      <Switch>
-        <Route path="/" component={Home} />
-        <Route path="/browse" component={Browse} />
-        <Route path="/series/:id" component={SeriesDetail} />
-        <Route path="/read/:id" component={Reader} />
-        <Route path="/upload" component={Upload} />
-        
-        <Route path="/library" component={Browse} />
-
-        <Route component={NotFound} />
-      </Switch>
-    </Layout>
+    <Switch>
+      <Route path="/read/:id" component={Reader} />
+      <Route>
+        <Layout>
+          <Switch>
+            <Route path="/" component={Home} />
+            <Route path="/browse" component={Browse} />
+            <Route path="/series/:id" component={SeriesDetail} />
+            <Route path="/upload" component={Upload} />
+            <Route path="/library" component={Browse} />
+            <Route component={NotFound} />
+          </Switch>
+        </Layout>
+      </Route>
+    </Switch>
   );
 }
 
