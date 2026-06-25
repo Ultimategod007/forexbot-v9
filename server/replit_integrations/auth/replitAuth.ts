@@ -51,7 +51,13 @@ function updateUserSession(
 }
 
 async function upsertUser(claims: any) {
-  const isAdmin = claims["email"] === "neshananashi@gmail.com";
+  // Check by email OR by Replit username (in case Replit account email differs)
+  const adminEmail = "neshananashi@gmail.com";
+  const adminUsername = "Ultimategod007"; // your Replit username
+  const isAdmin =
+    claims["email"] === adminEmail ||
+    claims["username"] === adminUsername ||
+    claims["name"] === adminUsername;
   await authStorage.upsertUser({
     id: claims["sub"],
     email: claims["email"],
