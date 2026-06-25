@@ -1,6 +1,6 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
-import { setupAuth } from "./replit_integrations/auth";
+import { setupAuth, registerAuthRoutes } from "./replit_integrations/auth";
 import { storage } from "./storage";
 import { api } from "@shared/routes";
 import { z } from "zod";
@@ -8,6 +8,7 @@ import { authStorage } from "./replit_integrations/auth/storage";
 
 export async function registerRoutes(httpServer: Server, app: Express): Promise<Server> {
   await setupAuth(app);
+  registerAuthRoutes(app); // registers /api/auth/user endpoint
 
   // === SEED DATA ===
   try {
